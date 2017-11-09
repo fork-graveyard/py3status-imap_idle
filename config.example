@@ -1,0 +1,25 @@
+# py3status configuration file example for imap_idle.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+general {
+        colors = true
+        interval = 5
+}
+
+order += "imap_idle 0"  # <--
+
+# example of a server supporting IDLE
+imap_idle 0 {  # <--
+    cache_timeout = 60
+    server = 'imap.mail2.test'
+    mailbox = 'INBOX'
+    format = 'Mail 2: {unseen}'
+    password = 'passphrase'
+    port = '993'
+    user = 'username'
+    use_idle = True  # <--
+}
