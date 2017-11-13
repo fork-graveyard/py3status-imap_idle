@@ -31,9 +31,8 @@ SAMPLE OUTPUT
 """
 try:
     #from imaplib2 import imaplib2 as imaplib
-
-    # use local copy of imaplib2, as pypi package is severely out of date
-    # library from: https://git.code.sf.net/p/imaplib2/code -> imaplib2.py3
+    """ use local copy of imaplib2, as pypi package is severely out of date
+    get library from: https://git.code.sf.net/p/imaplib2/code -> imaplib2.py3 """
     import sys, os
     sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
     import imaplib2 as imaplib  
@@ -169,16 +168,12 @@ class Py3status:
                     self.connection.idle()
                 else:
                     return
-        except socket_error as e:
-            self.py3.log("Socket error - " + str(e))
-            self.connection = None
-            self.mail_count = None
-        except imaplib.IMAP4.error as e:
-            self.py3.log("IMAP error - " + str(e))
+        except (socket_error, imaplib.IMAP4.abort, imaplib.IMAP4.readonly) as e:
+            self.py3.log("Recoverable error - " + str(e))
             self._disconnect()
             self.mail_count = None
-        except Exception as e:
-            self.mail_error = "Unknown error - " + str(e)
+        except (imaplib.IMAP4.error, Exception) as e:
+            self.mail_error = "Fatal error - " + str(e)
             self._disconnect()
             self.mail_count = None
 
